@@ -1,20 +1,39 @@
-#Matthias Grafe
-#ETS2021
-#µController Projekt
-#20.06.2022
+# Matthias Grafe
+# ETS2021
+# µController Projekt
+# 20.06.2022
+# Versionsnummer 1.0 vom 14.06.2022
 
-#Checkliste zum starten:
+# Was macht das Programm?
+# Ein HTU2X Sensor misst die Temperatur und Luftfeuchte. Ein BH1750 Helligkeitssensor misst die Helligkeit.
+# Die drei Werte werden auf dem OLED Display vom ESP32 ausgegeben.
+# Außerdem leuchten die LED´s von einem LED Stripe abhängig von der Luftfeuchte:
+# rot bei schlechten Werten, gelb bei normalen Werten und grün bei guten Werten
+# Die LED´s leuchten in Abhängigkeit von der Helligkeit entweder mit voller Lichtstärke oder gedimmt.
+# Die drei Werte werden außerdem als JSON File an MQTTX gesendet und von dort aus weiter verarbeitet.
+
+# Verwendete Hardware:
+# ESP32
+# Breadboard
+# HTU2X
+# BH1750
+# WS2812 LED Stripe
+
+# Anschlüsse:
+# BH1750 an
+# HTU2X an
+# WS 2812 an
+# ESP an 5V und GND
+
+# Die verwendeten Bibliotheken stehen in der Readme
+
+# Checkliste zum starten:
 #   IoT-Netzwerk verbinden
 #   Firewall aus
 #   MQTTX starten
 #   Node-Red starten
 
-#Verwendete Hardware:
-#ESP32
-#Breadboard
-#HTU2X
-#BH1750
-#WS2812 LED Stripe
+
 
 #-------------Bibliotheken aufrufen----------------------------------------------------
 import network
