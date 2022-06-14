@@ -26,6 +26,10 @@
 # ESP an 5V und GND
 
 # Die verwendeten Bibliotheken stehen in der Readme
+# Neopixel, https://github.com/adafruit/Adafruit_NeoPixel/tree/bc72e16da2e3e0d0d07d025d1b01e9fa1e506fad
+# BH1750, Moodle
+# HTU2X, https://github.com/Kleity/HTU21D-Micropython-ESP32
+# 
 
 # Checkliste zum starten:
 #   IoT-Netzwerk verbinden
@@ -77,31 +81,31 @@ tft = st7789.ST7789(                            # Objekt tft instanzieren
 NUM_OF_LED = 5                                  # 5 LED´s von den WS2812 LED´s verwendet
 np = NeoPixel(Pin(2), NUM_OF_LED)               # LED Band an Pin 2 angeschlossen
 
-r = 0
-g = 0
-b = 0
+r = 0                                           #
+g = 0                                           #
+b = 0                                           #
 
 #-------------Clear Stripe-------------------
-def clearStripe():
-      for i in range(5):
-        np[i] = (0,0,0)
-        np.write()
+def clearStripe():                              #
+      for i in range(5):                        #           
+        np[i] = (0,0,0)                         #
+        np.write()                              #
 
 #-------------WLAN Manager Schule------------------------------
-MQTT_SERVER = "192.168.1.231"
-CLIENT_ID = "MQTT_MG"
-MQTT_TOPIC = "BZTG/Ehnern/E101"
-WIFI_SSID = "BZTG-IoT"
-WIFI_PASSWORT = "WerderBremen24"
+MQTT_SERVER = "192.168.1.231"                   #               
+CLIENT_ID = "MQTT_MG"                           #
+MQTT_TOPIC = "BZTG/Ehnern/E101"                 #
+WIFI_SSID = "BZTG-IoT"                          #
+WIFI_PASSWORT = "WerderBremen24"                #
 
-wlan = network.WLAN(network.STA_IF)
-wlan.active(True)
-wlan.connect(WIFI_SSID,WIFI_PASSWORT)
-while not wlan.isconnected():
+wlan = network.WLAN(network.STA_IF)             #
+wlan.active(True)                               #
+wlan.connect(WIFI_SSID,WIFI_PASSWORT)           #
+while not wlan.isconnected():                   #
     pass
 
-print ("wifi connected")
-print(wlan.ifconfig())
+print ("wifi connected")                        #
+print(wlan.ifconfig())                          #
 #---------WLAN Manager Ende----------------------------
 
 #-------------WLAN zu Hause----------------------------
@@ -123,19 +127,19 @@ print(wlan.ifconfig())
 
 
 #----------MQTT----------------------------------------
-mqtt_MG = MQTTClient(CLIENT_ID,MQTT_SERVER)
-mqtt_MG.connect()
+mqtt_MG = MQTTClient(CLIENT_ID,MQTT_SERVER)     #
+mqtt_MG.connect()                               #
 
 
 #----------Werte senden--------------------------------
-while True:
-    tempa = round(htu.temperature)
-    luft = round(htu.humidity)
-    helligkeit = round(bh.CONT_LOWRES)
+while True:                                     #
+    tempa = round(htu.temperature)              #
+    luft = round(htu.humidity)                  #
+    helligkeit = round(bh.CONT_LOWRES)          #
 
-    datatemp = {
-        "temperatur":{
-            "HTU21D": str(tempa)
+    datatemp = {                                #
+        "temperatur":{                          #
+            "HTU21D": str(tempa)                #
         },
         "luftfeuchte":{
             "HTU21D": str(luft)
