@@ -2,7 +2,7 @@
 # ETS2021
 # µController Projekt
 # 20.06.2022
-# Versionsnummer 1.0 vom 14.06.2022
+# Versionsnummer 1.7 vom 15.06.2022
 
 """
 Was macht das Programm?
@@ -120,13 +120,15 @@ def convertHelligkeit(x):
     return wert
  
 
-mqttSenden = 2         # alle 10 sekunden
+mqttSenden = 3         # alle 10 sekunden
 sensorenAuswerten = 1   # jede Sekunde
 tftAnzeigen = 5         # alle 5 Sekunden 
 
 zeitMqtt = time() + mqttSenden
 zeitSensoren = time() + sensorenAuswerten
 zeitTft = time() + tftAnzeigen
+
+mqtt_MG.connect() 
 
 #----------Werte senden--------------------------------
 while True:
@@ -182,11 +184,11 @@ while True:
         
         print("MQTT verbunden!")
         print(datatemp)
-        mqtt_MG.connect() 
-        sleep(0.5)
+        #mqtt_MG.connect() 
+        #sleep(0.5)
         mqtt_MG.publish(MQTT_TOPIC,json.dumps(datatemp))
-        sleep(0.5)
-        mqtt_MG.disconnect()
+        #sleep(0.5)
+        #mqtt_MG.disconnect()
 
         zeitMqtt = time() + mqttSenden
 
