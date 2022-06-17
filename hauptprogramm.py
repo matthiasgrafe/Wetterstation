@@ -2,15 +2,15 @@
 # ETS2021
 # µController Projekt
 # 20.06.2022
-# Versionsnummer 1.7 vom 15.06.2022
+# Versionsnummer 2.2 vom 20.06.2022
 
 """
 Was macht das Programm?
-Ein HTU2X Sensor misst die Temperatur und Luftfeuchtigkeit. Ein BH1750 Helligkeitssensor misst die Helligkeit.  ## Luftfeuchtigkeit
-Die drei Werte werden auf dem TFT Display vom ESP32 ausgegeben.                                                 ## TFT Display
-Außerdem leuchten die LED´s von einem LED Stripe abhängig von der Luftfeuchtigkeit:                             ## Luftfeuchtigkeit
-rot bei schlechten Werten, gelb bei erhöten Werten und grün bei guten Werten                                    ## erhöten
-Die LEDs leuchten in Abhängigkeit von der Helligkeit entweder mit voller Lichtstärke oder gedimmt.              ## LEDs
+Ein HTU2X Sensor misst die Temperatur und Luftfeuchtigkeit. Ein BH1750 Helligkeitssensor misst die Helligkeit.  
+Die drei Werte werden auf dem TFT Display vom ESP32 ausgegeben.                                                 
+Außerdem leuchten die LED´s von einem LED Stripe abhängig von der Luftfeuchtigkeit:                             
+rot bei schlechten Werten, gelb bei erhöten Werten und grün bei guten Werten                                    
+Die LEDs leuchten in Abhängigkeit von der Helligkeit entweder mit voller Lichtstärke oder gedimmt.              
 Die drei Werte werden außerdem als JSON File an MQTTX gesendet und von dort aus weiter verarbeitet.
 """
 
@@ -18,7 +18,6 @@ Die drei Werte werden außerdem als JSON File an MQTTX gesendet und von dort aus
 # Verwendete Hardware:
 """
     ESP32
-    #---Breadboard---#
     HTU2X
     BH1750
     WS2812b
@@ -60,7 +59,7 @@ neopixel:
 
 #-------------Bibliotheken aufrufen----------------------------------------------------
 
-import json
+import json                                     #
 from main import MQTT_TOPIC, mqtt_MG
 from time import sleep, time
 from neopixel import NeoPixel
@@ -112,7 +111,7 @@ def clearStripe():                              #
 def neoSetzten(r, g, b):                        #
     for i in range(NUM_OF_LED):                 #
         np[i] = (r,g,b)                         #
-        np.write()                              #
+        np.write()                                                  #
 
 def convertHelligkeit(x):
     wert = (x - 0) * (254 - 1) // (3000 - 0) + 1
@@ -126,80 +125,80 @@ tftAnzeigen = 5         # alle 5 Sekunden
 
 zeitMqtt = time() + mqttSenden
 zeitSensoren = time() + sensorenAuswerten
-zeitTft = time() + tftAnzeigen
+zeitTft = time() + tftAnzeigen                                                      #       
 
-mqtt_MG.connect() 
+mqtt_MG.connect()                                                                   #
 
 #----------Werte senden--------------------------------
 while True:
     if time() >= zeitSensoren:
         try:
-            tempa = round(htu.temperature)     #
-            luft = round(htu.humidity)
+            tempa = round(htu.temperature)                                          #
+            luft = round(htu.humidity)                                              #
         except:
             print("Temp / Hum sensor kaputt")
             temp = str(0)
             luft = 0
         
         try:
-            helligkeit = round(bh.luminance(BH1750.CONT_LOWRES))     #
+            helligkeit = round(bh.luminance(BH1750.CONT_LOWRES))                    #
         except:
-            print("Helligkeit Sensor defekt")
-            helligkeit = 5000
+            print("Helligkeit Sensor defekt")                                       #
+            helligkeit = 5000                                                       #
 
-        npHell = convertHelligkeit(helligkeit)
+        npHell = convertHelligkeit(helligkeit)                                      #
 
-        if luft < 30:
+        if luft < 30:                                                               #
             r = 0
             g = 1
             b = 0
         
-        if (luft >= 30 and luft <= 50):
+        if (luft >= 30 and luft <= 50):                                             #
             r = 1
             g = 1
             b = 0
 
-        if luft >= 50:
+        if luft >= 50:                                                              #
             r = 1
             g = 0
             b = 0
 
-        neoSetzten(r*npHell, g*npHell, b*npHell)
+        neoSetzten(r*npHell, g*npHell, b*npHell)                                    #
 
-        ZeitSensoren = time() + sensorenAuswerten
+        ZeitSensoren = time() + sensorenAuswerten                                   #
 
 
-    if time() >= zeitMqtt:
-        datatemp = {                                #
-            "temperatur":{                          #
-                "HTU21Dtemp": tempa                     #
+    if time() >= zeitMqtt:                                                          #
+        datatemp = {                                                                #
+            "temperatur":{                                                          #
+                "HTU21Dtemp": tempa                                                 #
             },
-            "luftfeuchte":{
-                "HTU21Dluft": luft
+            "luftfeuchte":{                                                         #
+                "HTU21Dluft": luft                                                  #
             },
-            "helligkeit":{
-                "BH1750": helligkeit
+            "helligkeit":{                                                          #
+                "BH1750": helligkeit                                                #
             } 
         }
         
-        print("MQTT verbunden!")
-        print(datatemp)
+        print("MQTT verbunden!")                                                    #
+        print(datatemp)                                                             #
         #mqtt_MG.connect() 
         #sleep(0.5)
-        mqtt_MG.publish(MQTT_TOPIC,json.dumps(datatemp))
+        mqtt_MG.publish(MQTT_TOPIC,json.dumps(datatemp))                            #
         #sleep(0.5)
         #mqtt_MG.disconnect()
 
-        zeitMqtt = time() + mqttSenden
+        zeitMqtt = time() + mqttSenden                                              #
 
 
 #------------------Werte auf Display---------------------------------
-    if time() >= zeitTft:
-        tft.fill(st7789.BLACK)                                             
-        tft.text(font, str(tempa) + ' \xf8C', 10, 10, st7789.WHITE, st7789.BLACK)
+    if time() >= zeitTft:                                                           #
+        tft.fill(st7789.BLACK)                                                      #        
+        tft.text(font, str(tempa) + ' \xf8C', 10, 10, st7789.WHITE, st7789.BLACK)   #
 
-        tft.text(font, str(luft) + ' %', 10, 30, st7789.WHITE, st7789.BLACK) 
+        tft.text(font, str(luft) + ' %', 10, 30, st7789.WHITE, st7789.BLACK)        #
 
-        tft.text(font, str(helligkeit) + ' lux', 10, 50, st7789.WHITE, st7789.BLACK) 
+        tft.text(font, str(helligkeit) + ' lux', 10, 50, st7789.WHITE, st7789.BLACK)#
 
-        zeitTft = time() + tftAnzeigen
+        zeitTft = time() + tftAnzeigen                                              #
