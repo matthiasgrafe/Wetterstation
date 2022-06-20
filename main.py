@@ -2,8 +2,7 @@ import network
 from umqtt.simple import MQTTClient
 
 #-------------WLAN Manager Schule------------------------------
-"""
-MQTT_SERVER = "192.168.1.206"                   #               
+MQTT_SERVER = "192.168.1.177"                   #               
 CLIENT_ID = "MQTT_MG"                           #
 MQTT_TOPIC = "BZTG/Ehnern/E101"                 #
 WIFI_SSID = "BZTG-IoT"                          #
@@ -24,11 +23,11 @@ if not wlan.isconnected():
 
 print ("wifi connected")                        #
 print(wlan.ifconfig())                          #
-"""
+
 #---------WLAN Manager Ende----------------------------
 
 #-------------WLAN zu Hause----------------------------
-
+"""""
 MQTT_SERVER = "192.168.0.102"                   #               
 CLIENT_ID = "MQTT_MG"                           #
 MQTT_TOPIC = "BZTG/Ehnern/E101"                 #

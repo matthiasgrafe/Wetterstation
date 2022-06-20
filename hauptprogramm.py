@@ -2,7 +2,9 @@
 # ETS2021
 # µController Projekt
 # 20.06.2022
-# Versionsnummer 2.2 vom 20.06.2022
+# Versionsnummer 2.5 vom 20.06.2022
+
+
 
 """
 Was macht das Programm?
@@ -49,22 +51,16 @@ neopixel:
 
 
 
-# Checkliste zum starten:
-#   IoT-Netzwerk verbinden
-#   Firewall aus
-#   MQTTX starten
-#   Node-Red starten
-
 
 
 #-------------Bibliotheken aufrufen----------------------------------------------------
 
 import json                                     #
-from main import MQTT_TOPIC, mqtt_MG
-from time import sleep, time
-from neopixel import NeoPixel
-from htu2x import HTU21D
-from bh1750 import BH1750
+from main import MQTT_TOPIC, mqtt_MG            #
+from time import sleep, time                    #
+from neopixel import NeoPixel                   #
+from htu2x import HTU21D                        #
+from bh1750 import BH1750                       #
 from machine import Pin, SoftSPI, SoftI2C       # Pin(BMP180 und TFT), SoftSPI(TFT), SoftI2C(BMP180)
 import st7789py as st7789                       # TFT-Display
 from fonts import vga2_16x16 as font            # Schriftart laden
@@ -89,13 +85,13 @@ tft = st7789.ST7789(                            # Objekt tft instanzieren
         240,                                    # Pixel y-Achse
         reset=Pin(23, Pin.OUT),                 #
         cs=Pin(5, Pin.OUT),                     #
-        dc=Pin(16, Pin.OUT),                    # TEST!!!!!!!!!!!!!!!!!!!!!!!!!!
+        dc=Pin(16, Pin.OUT),                    # TEST!
         backlight=Pin(4, Pin.OUT),              #
         rotation=1)                             # rotation 90°, 2 180°
 #------------- Display Initialisierung Ende -----------------
 
 #------------- Neo Pixel Initialisierung ---------------
-NUM_OF_LED = 11                                  # 5 LED´s von den WS2812 LED´s verwendet
+NUM_OF_LED = 11                                 # 11 LED´s von den WS2812 LED´s verwendet
 np = NeoPixel(Pin(2), NUM_OF_LED)               # LED Band an Pin 2 angeschlossen
 
 r = 0                                           #
@@ -104,14 +100,14 @@ b = 0                                           #
 
 #------------| Funktionen |-------------------
 def clearStripe():                              #
-      for i in range(NUM_OF_LED):               #           
+      for i in range(NUM_OF_LED):               # Liste für die 11 LED´s           
         np[i] = (0,0,0)                         #
         np.write()                              #
 
 def neoSetzten(r, g, b):                        #
     for i in range(NUM_OF_LED):                 #
         np[i] = (r,g,b)                         #
-        np.write()                                                  #
+        np.write()                              #
 
 def convertHelligkeit(x):
     wert = (x - 0) * (254 - 1) // (3000 - 0) + 1
@@ -119,9 +115,9 @@ def convertHelligkeit(x):
     return wert
  
 
-mqttSenden = 3         # alle 10 sekunden
-sensorenAuswerten = 1   # jede Sekunde
-tftAnzeigen = 5         # alle 5 Sekunden 
+mqttSenden = 3                                  # alle 3 sekunden
+sensorenAuswerten = 1                           # jede Sekunde
+tftAnzeigen = 5                                 # alle 5 Sekunden 
 
 zeitMqtt = time() + mqttSenden
 zeitSensoren = time() + sensorenAuswerten
